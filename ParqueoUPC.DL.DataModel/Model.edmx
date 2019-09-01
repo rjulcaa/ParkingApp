@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ParqueoUPCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="ClienteId" />
+          </Key>
+          <Property Name="ClienteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="Dni" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TipoClienteId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Espacio">
+          <Key>
+            <PropertyRef Name="EspacioId" />
+          </Key>
+          <Property Name="EspacioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ocupado" Type="bit" Nullable="false" />
+          <Property Name="PisoId" Type="int" Nullable="false" />
+          <Property Name="x" Type="int" Nullable="false" />
+          <Property Name="y" Type="int" Nullable="false" />
+          <Property Name="Ancho" Type="int" Nullable="false" />
+          <Property Name="Alto" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Piso">
+          <Key>
+            <PropertyRef Name="PisoId" />
+          </Key>
+          <Property Name="PisoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NroPiso" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoCliente">
+          <Key>
+            <PropertyRef Name="TipoClienteId" />
+          </Key>
+          <Property Name="TipoClienteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DTipoCliente" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoUsuario">
+          <Key>
+            <PropertyRef Name="TipoUsuarioId" />
+          </Key>
+          <Property Name="TipoUsuarioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DTipoUsuario" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+          </Key>
+          <Property Name="UsuarioId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="DniUsuario" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="TipoUsuarioId" Type="int" Nullable="false" />
+          <Property Name="UsuarioL" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="VentaId" />
+          </Key>
+          <Property Name="VentaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioId" Type="int" Nullable="false" />
+          <Property Name="ClienteId" Type="int" Nullable="false" />
+          <Property Name="FechayHoraAlquilerInicio" Type="datetime" Nullable="false" />
+          <Property Name="FechayHoraAlquilerSalida" Type="datetime" />
+          <Property Name="EspacioId" Type="int" Nullable="false" />
+          <Property Name="EstadoPago" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cliente_TipoCliente">
+          <End Role="TipoCliente" Type="Self.TipoCliente" Multiplicity="1" />
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoCliente">
+              <PropertyRef Name="TipoClienteId" />
+            </Principal>
+            <Dependent Role="Cliente">
+              <PropertyRef Name="TipoClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Espacio_Piso">
+          <End Role="Piso" Type="Self.Piso" Multiplicity="1" />
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Piso">
+              <PropertyRef Name="PisoId" />
+            </Principal>
+            <Dependent Role="Espacio">
+              <PropertyRef Name="PisoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuario_TipoUsuario">
+          <End Role="TipoUsuario" Type="Self.TipoUsuario" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoUsuario">
+              <PropertyRef Name="TipoUsuarioId" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="TipoUsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="ClienteId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="ClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Espacio">
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espacio">
+              <PropertyRef Name="EspacioId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="EspacioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UsuarioId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ParqueoUPCModelStoreContainer">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Espacio" EntityType="Self.Espacio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Piso" EntityType="Self.Piso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoUsuario" EntityType="Self.TipoUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Venta" EntityType="Self.Venta" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cliente_TipoCliente" Association="Self.FK_Cliente_TipoCliente">
+            <End Role="TipoCliente" EntitySet="TipoCliente" />
+            <End Role="Cliente" EntitySet="Cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Espacio_Piso" Association="Self.FK_Espacio_Piso">
+            <End Role="Piso" EntitySet="Piso" />
+            <End Role="Espacio" EntitySet="Espacio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuario_TipoUsuario" Association="Self.FK_Usuario_TipoUsuario">
+            <End Role="TipoUsuario" EntitySet="TipoUsuario" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Cliente" Association="Self.FK_Venta_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Espacio" Association="Self.FK_Venta_Espacio">
+            <End Role="Espacio" EntitySet="Espacio" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Usuario" Association="Self.FK_Venta_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ParqueoUPCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="ClienteId" />
+          </Key>
+          <Property Name="ClienteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Dni" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TipoClienteId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TipoCliente" Relationship="Self.FK_Cliente_TipoCliente" FromRole="Cliente" ToRole="TipoCliente" />
+          <NavigationProperty Name="Venta" Relationship="Self.FK_Venta_Cliente" FromRole="Cliente" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="Espacio">
+          <Key>
+            <PropertyRef Name="EspacioId" />
+          </Key>
+          <Property Name="EspacioId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ocupado" Type="Boolean" Nullable="false" />
+          <Property Name="PisoId" Type="Int32" Nullable="false" />
+          <Property Name="x" Type="Int32" Nullable="false" />
+          <Property Name="y" Type="Int32" Nullable="false" />
+          <Property Name="Ancho" Type="Int32" Nullable="false" />
+          <Property Name="Alto" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Piso" Relationship="Self.FK_Espacio_Piso" FromRole="Espacio" ToRole="Piso" />
+          <NavigationProperty Name="Venta" Relationship="Self.FK_Venta_Espacio" FromRole="Espacio" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="Piso">
+          <Key>
+            <PropertyRef Name="PisoId" />
+          </Key>
+          <Property Name="PisoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NroPiso" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Espacio" Relationship="Self.FK_Espacio_Piso" FromRole="Piso" ToRole="Espacio" />
+        </EntityType>
+        <EntityType Name="TipoCliente">
+          <Key>
+            <PropertyRef Name="TipoClienteId" />
+          </Key>
+          <Property Name="TipoClienteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DTipoCliente" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Cliente_TipoCliente" FromRole="TipoCliente" ToRole="Cliente" />
+        </EntityType>
+        <EntityType Name="TipoUsuario">
+          <Key>
+            <PropertyRef Name="TipoUsuarioId" />
+          </Key>
+          <Property Name="TipoUsuarioId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DTipoUsuario" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Usuario_TipoUsuario" FromRole="TipoUsuario" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="UsuarioId" />
+          </Key>
+          <Property Name="UsuarioId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DniUsuario" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TipoUsuarioId" Type="Int32" Nullable="false" />
+          <Property Name="UsuarioL" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TipoUsuario" Relationship="Self.FK_Usuario_TipoUsuario" FromRole="Usuario" ToRole="TipoUsuario" />
+          <NavigationProperty Name="Venta" Relationship="Self.FK_Venta_Usuario" FromRole="Usuario" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="VentaId" />
+          </Key>
+          <Property Name="VentaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioId" Type="Int32" Nullable="false" />
+          <Property Name="ClienteId" Type="Int32" Nullable="false" />
+          <Property Name="FechayHoraAlquilerInicio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechayHoraAlquilerSalida" Type="DateTime" Precision="3" />
+          <Property Name="EspacioId" Type="Int32" Nullable="false" />
+          <Property Name="EstadoPago" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Venta_Cliente" FromRole="Venta" ToRole="Cliente" />
+          <NavigationProperty Name="Espacio" Relationship="Self.FK_Venta_Espacio" FromRole="Venta" ToRole="Espacio" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Venta_Usuario" FromRole="Venta" ToRole="Usuario" />
+        </EntityType>
+        <Association Name="FK_Cliente_TipoCliente">
+          <End Role="TipoCliente" Type="Self.TipoCliente" Multiplicity="1" />
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoCliente">
+              <PropertyRef Name="TipoClienteId" />
+            </Principal>
+            <Dependent Role="Cliente">
+              <PropertyRef Name="TipoClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="ClienteId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="ClienteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Espacio_Piso">
+          <End Role="Piso" Type="Self.Piso" Multiplicity="1" />
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Piso">
+              <PropertyRef Name="PisoId" />
+            </Principal>
+            <Dependent Role="Espacio">
+              <PropertyRef Name="PisoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Espacio">
+          <End Role="Espacio" Type="Self.Espacio" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Espacio">
+              <PropertyRef Name="EspacioId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="EspacioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuario_TipoUsuario">
+          <End Role="TipoUsuario" Type="Self.TipoUsuario" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoUsuario">
+              <PropertyRef Name="TipoUsuarioId" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="TipoUsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Venta_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UsuarioId" />
+            </Principal>
+            <Dependent Role="Venta">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ParqueoUPCEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+          <EntitySet Name="Espacio" EntityType="Self.Espacio" />
+          <EntitySet Name="Piso" EntityType="Self.Piso" />
+          <EntitySet Name="TipoCliente" EntityType="Self.TipoCliente" />
+          <EntitySet Name="TipoUsuario" EntityType="Self.TipoUsuario" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+          <EntitySet Name="Venta" EntityType="Self.Venta" />
+          <AssociationSet Name="FK_Cliente_TipoCliente" Association="Self.FK_Cliente_TipoCliente">
+            <End Role="TipoCliente" EntitySet="TipoCliente" />
+            <End Role="Cliente" EntitySet="Cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Cliente" Association="Self.FK_Venta_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Espacio_Piso" Association="Self.FK_Espacio_Piso">
+            <End Role="Piso" EntitySet="Piso" />
+            <End Role="Espacio" EntitySet="Espacio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Espacio" Association="Self.FK_Venta_Espacio">
+            <End Role="Espacio" EntitySet="Espacio" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuario_TipoUsuario" Association="Self.FK_Usuario_TipoUsuario">
+            <End Role="TipoUsuario" EntitySet="TipoUsuario" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Venta_Usuario" Association="Self.FK_Venta_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Venta" EntitySet="Venta" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ParqueoUPCModelStoreContainer" CdmEntityContainer="ParqueoUPCEntities">
+          <EntitySetMapping Name="Cliente">
+            <EntityTypeMapping TypeName="ParqueoUPCModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="ClienteId" ColumnName="ClienteId" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Dni" ColumnName="Dni" />
+                <ScalarProperty Name="TipoClienteId" ColumnName="TipoClienteId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Espacio">
+            <EntityTypeMapping TypeName="ParqueoUPCModel.Espacio">
+              <MappingFragment StoreEntitySet="Espacio">
+                <ScalarProperty Name="EspacioId" ColumnName="EspacioId" />
+                <ScalarProperty Name="Ocupado" ColumnName="Ocupado" />
+                <ScalarProperty Name="PisoId" ColumnName="PisoId" />
+                <ScalarProperty Name="x" ColumnName="x" />
+                <ScalarProperty Name="y" ColumnName="y" />
+                <ScalarProperty Name="Ancho" ColumnName="Ancho" />
+                <ScalarProperty Name="Alto" ColumnName="Alto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Piso">
+            <EntityTypeMapping TypeName="ParqueoUPCModel.Piso">
+              <MappingFragment StoreEntitySet="Piso">
+                <ScalarProperty Name="PisoId" ColumnName="PisoId" />
+                <ScalarProperty Name="NroPiso" ColumnName="NroPiso" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoCliente">
+            <EntityTypeMapping TypeName="ParqueoUPCModel.TipoCliente">
+              <MappingFragment StoreEntitySet="TipoCliente">
+                <ScalarProperty Name="TipoClienteId" ColumnName="TipoClienteId" />
+                <ScalarProperty Name="DTipoCliente" ColumnName="DTipoCliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoUsuario">
+            <EntityTypeMapping TypeName="ParqueoUPCModel.TipoUsuario">
+              <MappingFragment StoreEntitySet="TipoUsuario">
+                <ScalarProperty Name="TipoUsuarioId" ColumnName="TipoUsuarioId" />
+                <ScalarProperty Name="DTipoUsuario" ColumnName="DTipoUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="ParqueoUPCModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="DniUsuario" ColumnName="DniUsuario" />
+                <ScalarProperty Name="TipoUsuarioId" ColumnName="TipoUsuarioId" />
+                <ScalarProperty Name="UsuarioL" ColumnName="UsuarioL" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Venta">
+            <EntityTypeMapping TypeName="ParqueoUPCModel.Venta">
+              <MappingFragment StoreEntitySet="Venta">
+                <ScalarProperty Name="VentaId" ColumnName="VentaId" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="ClienteId" ColumnName="ClienteId" />
+                <ScalarProperty Name="FechayHoraAlquilerInicio" ColumnName="FechayHoraAlquilerInicio" />
+                <ScalarProperty Name="FechayHoraAlquilerSalida" ColumnName="FechayHoraAlquilerSalida" />
+                <ScalarProperty Name="EspacioId" ColumnName="EspacioId" />
+                <ScalarProperty Name="EstadoPago" ColumnName="EstadoPago" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
